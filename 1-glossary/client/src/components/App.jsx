@@ -17,7 +17,12 @@ const App = () => {
 
   const addTerm = (e) => {
     e.preventDefault();
-    console.log(` term: ${e.target.term.value} definition: ${e.target.definition.value}`);
+    const newTerm = {
+      name: e.target.term.value,
+      definition: e.target.definition.value
+    }
+    setTerms([...terms, newTerm]);
+
   }
 
   return (
