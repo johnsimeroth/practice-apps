@@ -13,6 +13,9 @@ const defaultTerms = [
 const App = () => {
 
   const [terms, setTerms] = useState(defaultTerms);
+  const [displayedTerms, setDisplayedTerms] = useState(defaultTerms);
+  const [searchVal, setSearchVal] = useState('');
+  useEffect(() => {displayTerms()}, [terms, searchVal])
   // useEffect(() => {getAllTerms()}, []);
 
   const addTerm = (e) => {
@@ -22,15 +25,20 @@ const App = () => {
       definition: e.target.definition.value
     }
     setTerms([...terms, newTerm]);
+    e.target.reset();
+  }
 
+  const displayTerms = () => {
+    const newDisplayedTerms = terms.filter(term => term.name.includes(searchVal));
+    setDisplayedTerms(newDisplayedTerms);
   }
 
   return (
     <div>
       <h1>MY GLOSSARY</h1>
-      <div><AddTermForm handleSubmit={addTerm} handle /></div>
-      <div><SearchTerms /></div>
-      <div><TermsList terms={terms} /></div>
+      <div><AddTermForm handleSubmit={addTerm} /></div>
+      <div><SearchTerms searchVal={searchVal} handleChange={(e) => (setSearchVal(e.target.value))} /></div>
+      <div><TermsList terms={displayedTerms} /></div>
     </div>
   );
 }
