@@ -4,7 +4,11 @@ import AddTermForm from './AddTermForm.jsx';
 import SearchTerms from './SearchTerms.jsx';
 import TermsList from './TermsList.jsx';
 
-const defaultTerms = ['word1', 'word2', 'word3'];
+const defaultTerms = [
+  {name: 'word1', definition: 'def1'},
+  {name: 'word2', definition: 'def2'},
+  {name: 'word3', definition: 'def3'},
+];
 
 const App = () => {
 

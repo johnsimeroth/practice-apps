@@ -4,7 +4,13 @@ const Term = ({term}) => {
 
 
   return (
-    <li>{term}</li>
+    <li>
+      <div>
+        <h2>{term.name}</h2>
+        <h4>{term.definition}</h4>
+      </div>
+      <button>Edit</button>
+    </li>
   );
 }
 
