@@ -12,12 +12,20 @@ const defaultTerms = [
 
 const App = () => {
 
+  const [terms, setTerms] = useState(defaultTerms);
+  // useEffect(() => {getAllTerms()}, []);
+
+  const addTerm = (e) => {
+    e.preventDefault();
+    console.log(` term: ${e.target.term.value} definition: ${e.target.definition.value}`);
+  }
 
   return (
     <div>
-      <div><AddTermForm /></div>
+      <h1>MY GLOSSARY</h1>
+      <div><AddTermForm handleSubmit={addTerm} handle /></div>
       <div><SearchTerms /></div>
-      <div><TermsList terms={defaultTerms} /></div>
+      <div><TermsList terms={terms} /></div>
     </div>
   );
 }
