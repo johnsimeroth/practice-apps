@@ -48,10 +48,9 @@ const App = () => {
 
 
   const editTerm = (e, term) => {
-    const newName = prompt('Edit the term name: ', term.name);
-    const newDef = prompt('Edit the definition: ', term.definition);
-
-    const updatedTerm = {name: newName, definition: newDef};
+    let updatedTerm = {...term};
+    updatedTerm.name = prompt('Edit the term name: ', term.name);
+    updatedTerm.definition = prompt('Edit the definition: ', term.definition);
     putTerm(updatedTerm)
       .then(updateTermsList)
       .catch(err => console.log('error updating term: ' + err));
