@@ -3,20 +3,36 @@ import { useState, useEffect } from 'react';
 import AddTermForm from './AddTermForm.jsx';
 import SearchTerms from './SearchTerms.jsx';
 import TermsList from './TermsList.jsx';
+import { getTerms, postTerm, putTerm } from './requestHandler.js';
 
-const defaultTerms = [
-  {name: 'word1', definition: 'def1'},
-  {name: 'word2', definition: 'def2'},
-  {name: 'word3', definition: 'def3'},
-];
+
+
+
 
 const App = () => {
 
-  const [terms, setTerms] = useState(defaultTerms);
-  const [displayedTerms, setDisplayedTerms] = useState(defaultTerms);
+
+  // STATES AND EFFECTS
+
+  const [terms, setTerms] = useState([]);
+  const [displayedTerms, setDisplayedTerms] = useState([]);
   const [searchVal, setSearchVal] = useState('');
   useEffect(() => {displayTerms()}, [terms, searchVal])
-  // useEffect(() => {getAllTerms()}, []);
+  useEffect(() => {getTerms().then(updateTermsList)}, []);
+
+
+  // HELPER FUNCTIONS
+
+  const updateTermsList = (res) => (setTerms(res.data));
+
+
+  const displayTerms = () => {
+    const newDisplayedTerms = terms.filter(term => term.name.includes(searchVal));
+    setDisplayedTerms(newDisplayedTerms);
+  }
+
+
+  // EVENT HANDLERS
 
   const addTerm = (e) => {
     e.preventDefault();
@@ -24,21 +40,32 @@ const App = () => {
       name: e.target.term.value,
       definition: e.target.definition.value
     }
-    setTerms([...terms, newTerm]);
+    postTerm(newTerm)
+      .then(updateTermsList)
+      .catch(err => console.log('error adding term: ' + err));
     e.target.reset();
   }
 
-  const displayTerms = () => {
-    const newDisplayedTerms = terms.filter(term => term.name.includes(searchVal));
-    setDisplayedTerms(newDisplayedTerms);
+
+  const editTerm = (e, term) => {
+    const newName = prompt('Edit the term name: ', term.name);
+    const newDef = prompt('Edit the definition: ', term.definition);
+
+    const updatedTerm = {name: newName, definition: newDef};
+    putTerm(updatedTerm)
+      .then(updateTermsList)
+      .catch(err => console.log('error updating term: ' + err));
   }
+
+
+  // JSX ELEMENT TO RETURN
 
   return (
     <div>
       <h1>MY GLOSSARY</h1>
       <div><AddTermForm handleSubmit={addTerm} /></div>
       <div><SearchTerms searchVal={searchVal} handleChange={(e) => (setSearchVal(e.target.value))} /></div>
-      <div><TermsList terms={displayedTerms} /></div>
+      <div><TermsList terms={displayedTerms} handleEdit={editTerm}/></div>
     </div>
   );
 }

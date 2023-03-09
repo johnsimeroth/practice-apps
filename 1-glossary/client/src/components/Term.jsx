@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Term = ({term}) => {
+const Term = ({term, handleEdit}) => {
 
 
   return (
@@ -9,7 +9,7 @@ const Term = ({term}) => {
         <h2>{term.name}</h2>
         <h4>{term.definition}</h4>
       </div>
-      <button>Edit</button>
+      <button onClick={(e) => handleEdit(e, term)}>Edit</button>
     </li>
   );
 }
